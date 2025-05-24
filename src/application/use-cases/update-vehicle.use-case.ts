@@ -25,12 +25,12 @@ export class UpdateVehicleUseCase {
     }
 
     if (updateVehicleDto.placa) {
-      const [existingVehicleByPlate] = await this.vehicleRepository.findBy(
+      const [existingVehicleByPlaca] = await this.vehicleRepository.findBy(
         'placa',
         updateVehicleDto.placa,
       );
 
-      if (existingVehicleByPlate && existingVehicleByPlate.id !== id) {
+      if (existingVehicleByPlaca && existingVehicleByPlaca.id !== id) {
         throw new UniqueConstraintError(
           'Vehicle',
           'placa',

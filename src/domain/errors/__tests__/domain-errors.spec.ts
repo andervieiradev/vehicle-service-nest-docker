@@ -25,15 +25,15 @@ describe('Domain Errors', () => {
 
   describe('UniqueConstraintError', () => {
     it('should create error with entity name, field and value', () => {
-      const error = new UniqueConstraintError('Vehicle', 'plate', 'ABC1234');
-      expect(error.message).toBe("Vehicle with plate 'ABC1234' already exists");
+      const error = new UniqueConstraintError('Vehicle', 'placa', 'ABC1234');
+      expect(error.message).toBe("Vehicle with placa 'ABC1234' already exists");
       expect(error.statusCode).toBe(HttpStatus.CONFLICT);
       expect(error.errorCode).toBe('UNIQUE_CONSTRAINT_VIOLATION');
     });
 
     it('should create error with entity name and field only', () => {
-      const error = new UniqueConstraintError('Vehicle', 'plate');
-      expect(error.message).toBe('Vehicle with this plate already exists');
+      const error = new UniqueConstraintError('Vehicle', 'placa');
+      expect(error.message).toBe('Vehicle with this placa already exists');
       expect(error.statusCode).toBe(HttpStatus.CONFLICT);
       expect(error.errorCode).toBe('UNIQUE_CONSTRAINT_VIOLATION');
     });

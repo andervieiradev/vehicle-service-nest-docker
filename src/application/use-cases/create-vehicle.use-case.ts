@@ -15,16 +15,16 @@ export class CreateVehicleUseCase {
   ) {}
 
   async execute(createVehicleDto: CreateVehicleDto): Promise<Vehicle> {
-    // Check if vehicle with same plate already exists
-    const [existingVehicleByPlate] = await this.vehicleRepository.findBy(
+    // Check if vehicle with same placa already exists
+    const [existingVehicleByPlaca] = await this.vehicleRepository.findBy(
       'placa',
       createVehicleDto.placa,
     );
 
-    if (existingVehicleByPlate) {
+    if (existingVehicleByPlaca) {
       throw new UniqueConstraintError(
         'Vehicle',
-        'plate',
+        'placa',
         createVehicleDto.placa,
       );
     }
@@ -44,15 +44,15 @@ export class CreateVehicleUseCase {
     }
 
     // Check if vehicle with same chassis already exists
-    const [existingVehicleByChassis] = await this.vehicleRepository.findBy(
+    const [existingVehicleByChassi] = await this.vehicleRepository.findBy(
       'chassi',
       createVehicleDto.chassi,
     );
 
-    if (existingVehicleByChassis) {
+    if (existingVehicleByChassi) {
       throw new UniqueConstraintError(
         'Vehicle',
-        'chassis',
+        'chassi',
         createVehicleDto.chassi,
       );
     }
