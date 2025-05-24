@@ -12,7 +12,7 @@ export class VehicleRepositoryMemory implements IVehicleRepository {
     value: unknown,
   ): Promise<Vehicle[] | null> {
     const vehicles = this.vehicles.filter((v) => v[field] === value);
-    return vehicles.length > 0 ? [...vehicles] : null;
+    return [...vehicles];
   }
 
   async findAll(): Promise<Vehicle[]> {
