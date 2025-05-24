@@ -1,5 +1,11 @@
 import { plainToClass } from 'class-transformer';
-import { IsEnum, IsNumber, IsString, validateSync } from 'class-validator';
+import {
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  validateSync,
+} from 'class-validator';
 
 enum Environment {
   Development = 'development',
@@ -7,24 +13,41 @@ enum Environment {
   Test = 'test',
 }
 
+enum DatabaseType {
+  MySQL = 'mysql',
+  SQLite = 'sqlite',
+}
+
 export class EnvironmentVariables {
   @IsEnum(Environment)
   NODE_ENV: Environment;
 
+  @IsEnum(DatabaseType)
+  @IsOptional()
+  DB_TYPE: DatabaseType = DatabaseType.MySQL;
+
   @IsString()
+  @IsOptional()
   DB_HOST: string;
 
   @IsNumber()
+  @IsOptional()
   DB_PORT: number;
 
   @IsString()
+  @IsOptional()
   DB_USERNAME: string;
 
   @IsString()
+  @IsOptional()
   DB_PASSWORD: string;
 
   @IsString()
   DB_DATABASE: string;
+
+  @IsString()
+  @IsOptional()
+  DB_SQLITE_FILE: string = 'database.sqlite';
 }
 
 export function validate(config: Record<string, unknown>) {

@@ -9,17 +9,29 @@ import { Vehicle } from '../../domain/entities/vehicle.entity';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [DatabaseConfig],
-      useFactory: (dbConfig: DatabaseConfig) => ({
-        type: 'mysql',
-        host: dbConfig.host,
-        port: dbConfig.port,
-        username: dbConfig.username,
-        password: dbConfig.password,
-        database: dbConfig.database,
-        entities: [Vehicle],
-        synchronize: !dbConfig.isProduction,
-        autoLoadEntities: true,
-      }),
+      useFactory: (dbConfig: DatabaseConfig) => {
+        if (dbConfig.isSqlite) {
+          return {
+            type: 'sqlite',
+            database: dbConfig.sqliteFile,
+            entities: [Vehicle],
+            synchronize: !dbConfig.isProduction,
+            autoLoadEntities: true,
+          };
+        }
+
+        return {
+          type: 'mysql',
+          host: dbConfig.host,
+          port: dbConfig.port,
+          username: dbConfig.username,
+          password: dbConfig.password,
+          database: dbConfig.database,
+          entities: [Vehicle],
+          synchronize: !dbConfig.isProduction,
+          autoLoadEntities: true,
+        };
+      },
     }),
   ],
   exports: [TypeOrmModule],
