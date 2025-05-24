@@ -18,8 +18,6 @@ export class VehicleRepositoryTypeOrm implements IVehicleRepository {
   async findById(id: string): Promise<Vehicle | null> {
     const vehicle = await this.vehicleRepository.findOneBy({ id });
 
-    console.log('vehicle', vehicle);
-
     if (!vehicle) {
       return null;
     }
