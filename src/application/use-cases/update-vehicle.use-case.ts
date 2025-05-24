@@ -1,7 +1,11 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { IVehicleRepository } from '../../domain/repositories/vehicle-repository.interface';
 import { Vehicle } from '../../domain/entities/vehicle.entity';
 import { UpdateVehicleDto } from '../dtos/update-vehicle.dto';
+import {
+  EntityNotFoundError,
+  UniqueConstraintError,
+} from '../../domain/errors';
 
 @Injectable()
 export class UpdateVehicleUseCase {
@@ -17,34 +21,52 @@ export class UpdateVehicleUseCase {
     const existingVehicle = await this.vehicleRepository.findById(id);
 
     if (!existingVehicle) {
-      throw new NotFoundException(`Vehicle with ID ${id} not found`);
+      throw new EntityNotFoundError('Vehicle', id);
     }
 
-    const [existingVehicleByPlate] = await this.vehicleRepository.findBy(
-      'placa',
-      updateVehicleDto.placa,
-    );
+    if (updateVehicleDto.placa) {
+      const [existingVehicleByPlate] = await this.vehicleRepository.findBy(
+        'placa',
+        updateVehicleDto.placa,
+      );
 
-    if (existingVehicleByPlate && existingVehicleByPlate.id !== id) {
-      throw new Error('Vehicle with same plate already exists');
+      if (existingVehicleByPlate && existingVehicleByPlate.id !== id) {
+        throw new UniqueConstraintError(
+          'Vehicle',
+          'placa',
+          updateVehicleDto.placa,
+        );
+      }
     }
 
-    const [existingVehicleByChassi] = await this.vehicleRepository.findBy(
-      'chassi',
-      updateVehicleDto.chassi,
-    );
+    if (updateVehicleDto.chassi) {
+      const [existingVehicleByChassi] = await this.vehicleRepository.findBy(
+        'chassi',
+        updateVehicleDto.chassi,
+      );
 
-    if (existingVehicleByChassi && existingVehicleByChassi.id !== id) {
-      throw new Error('Vehicle with same chassi already exists');
+      if (existingVehicleByChassi && existingVehicleByChassi.id !== id) {
+        throw new UniqueConstraintError(
+          'Vehicle',
+          'chassi',
+          updateVehicleDto.chassi,
+        );
+      }
     }
 
-    const [existingVehicleByRenavam] = await this.vehicleRepository.findBy(
-      'renavam',
-      updateVehicleDto.renavam,
-    );
+    if (updateVehicleDto.renavam) {
+      const [existingVehicleByRenavam] = await this.vehicleRepository.findBy(
+        'renavam',
+        updateVehicleDto.renavam,
+      );
 
-    if (existingVehicleByRenavam && existingVehicleByRenavam.id !== id) {
-      throw new Error('Vehicle with same renavam already exists');
+      if (existingVehicleByRenavam && existingVehicleByRenavam.id !== id) {
+        throw new UniqueConstraintError(
+          'Vehicle',
+          'renavam',
+          updateVehicleDto.renavam,
+        );
+      }
     }
 
     const updatedVehicle = await this.vehicleRepository.update(
@@ -53,7 +75,7 @@ export class UpdateVehicleUseCase {
     );
 
     if (!updatedVehicle) {
-      throw new NotFoundException(`Vehicle with ID ${id} not found`);
+      throw new EntityNotFoundError('Vehicle', id);
     }
 
     return updatedVehicle;

@@ -1,6 +1,7 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { IVehicleRepository } from '../../domain/repositories/vehicle-repository.interface';
 import { Vehicle } from '../../domain/entities/vehicle.entity';
+import { EntityNotFoundError } from '../../domain/errors';
 
 @Injectable()
 export class GetVehicleByIdUseCase {
@@ -13,7 +14,7 @@ export class GetVehicleByIdUseCase {
     const vehicle = await this.vehicleRepository.findById(id);
 
     if (!vehicle) {
-      throw new NotFoundException(`Vehicle with ID ${id} not found`);
+      throw new EntityNotFoundError('Vehicle', id);
     }
 
     return vehicle;
