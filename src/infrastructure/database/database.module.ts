@@ -9,6 +9,16 @@ import { DatabaseConfig } from '../config/database.config';
       imports: [ConfigModule],
       inject: [DatabaseConfig],
       useFactory: (dbConfig: DatabaseConfig) => {
+        if (dbConfig.isTest) {
+          return {
+            type: 'sqlite',
+            database: ':memory:',
+            autoLoadEntities: true,
+            entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
+            synchronize: !dbConfig.isProduction,
+          };
+        }
+
         if (dbConfig.isSqlite) {
           return {
             type: 'sqlite',

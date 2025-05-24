@@ -44,4 +44,8 @@ export class DatabaseConfig {
   get isProduction(): boolean {
     return this.configService.get<string>('NODE_ENV') === 'production';
   }
+
+  get isTest(): boolean {
+    return this.configService.get<string>('NODE_ENV') === 'test';
+  }
 }

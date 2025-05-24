@@ -7,6 +7,25 @@ import { CreateVehicleDto } from '../src/application/dtos/create-vehicle.dto';
 import { UpdateVehicleDto } from '../src/application/dtos/update-vehicle.dto';
 import { DomainExceptionFilter } from '../src/infrastructure/filters/domain-exception.filter';
 import { VehicleRepositoryMemory } from '../src/infrastructure/repositories/vehicle.memory.repository';
+import { RabbitMQModule } from '../src/infrastructure/messaging/rabbitmq/rabbitmq.module';
+import { ClientsModule } from '@nestjs/microservices';
+import { IMessagePublisher } from '../src/domain/events/message-publisher.interface';
+
+class MockMessagePublisher implements IMessagePublisher {
+  publishVehicleCreated = jest.fn().mockImplementation(() => Promise.resolve());
+}
+
+// Mock para o módulo RabbitMQ
+const mockRabbitMQModule = {
+  module: RabbitMQModule,
+  providers: [
+    {
+      provide: 'IMessagePublisher',
+      useClass: MockMessagePublisher,
+    },
+  ],
+  exports: ['IMessagePublisher'],
+};
 
 describe('Vehicle Controller (e2e)', () => {
   let app: INestApplication;
@@ -33,8 +52,16 @@ describe('Vehicle Controller (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
-      .overrideProvider('IVehicleRepository')
-      .useClass(VehicleRepositoryMemory)
+      .overrideModule(RabbitMQModule)
+      .useModule(mockRabbitMQModule)
+      .overrideProvider(ClientsModule)
+      // Substitui ClientsModule por um mock vazio
+      .useValue({
+        name: 'VEHICLE_SERVICE',
+        useValue: {
+          emit: jest.fn().mockImplementation(() => Promise.resolve()),
+        },
+      })
       .compile();
 
     app = moduleFixture.createNestApplication();
