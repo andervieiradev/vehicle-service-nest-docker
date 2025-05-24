@@ -8,9 +8,10 @@ import { GetAllVehiclesUseCase } from '../../application/use-cases/get-all-vehic
 import { GetVehicleByIdUseCase } from '../../application/use-cases/get-vehicle-by-id.use-case';
 import { UpdateVehicleUseCase } from '../../application/use-cases/update-vehicle.use-case';
 import { VehicleController } from '../controllers/vehicle.controller';
+import { RabbitMQModule } from '../../infrastructure/messaging/rabbitmq/rabbitmq.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Vehicle])],
+  imports: [TypeOrmModule.forFeature([Vehicle]), RabbitMQModule],
   controllers: [VehicleController],
   providers: [
     {

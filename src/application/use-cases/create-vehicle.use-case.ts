@@ -6,12 +6,15 @@ import {
   UniqueConstraintError,
   EntityCreationError,
 } from '../../domain/errors';
+import { IMessagePublisher } from '../../domain/events/message-publisher.interface';
 
 @Injectable()
 export class CreateVehicleUseCase {
   constructor(
     @Inject('IVehicleRepository')
     private vehicleRepository: IVehicleRepository,
+    @Inject('IMessagePublisher')
+    private messagePublisher: IMessagePublisher,
   ) {}
 
   async execute(createVehicleDto: CreateVehicleDto): Promise<Vehicle> {
@@ -58,11 +61,14 @@ export class CreateVehicleUseCase {
     }
 
     const vehicleData = new Vehicle(createVehicleDto);
-    const vehicle = this.vehicleRepository.create(vehicleData);
+    const vehicle = await this.vehicleRepository.create(vehicleData);
 
     if (!vehicle) {
       throw new EntityCreationError('Vehicle');
     }
+
+    // Publicar evento de veículo criado
+    await this.messagePublisher.publishVehicleCreated(vehicle);
 
     return vehicle;
   }
