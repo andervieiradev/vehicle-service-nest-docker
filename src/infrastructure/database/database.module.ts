@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '../config/config.module';
 import { DatabaseConfig } from '../config/database.config';
-import { Vehicle } from '../../domain/entities/vehicle.entity';
 
 @Module({
   imports: [
@@ -14,9 +13,9 @@ import { Vehicle } from '../../domain/entities/vehicle.entity';
           return {
             type: 'sqlite',
             database: dbConfig.sqliteFile,
-            entities: [Vehicle],
             synchronize: !dbConfig.isProduction,
             autoLoadEntities: true,
+            entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
           };
         }
 
@@ -27,9 +26,9 @@ import { Vehicle } from '../../domain/entities/vehicle.entity';
           username: dbConfig.username,
           password: dbConfig.password,
           database: dbConfig.database,
-          entities: [Vehicle],
           synchronize: !dbConfig.isProduction,
           autoLoadEntities: true,
+          entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
         };
       },
     }),
