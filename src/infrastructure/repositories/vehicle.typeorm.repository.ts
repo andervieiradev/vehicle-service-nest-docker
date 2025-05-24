@@ -11,6 +11,13 @@ export class VehicleRepositoryTypeOrm implements IVehicleRepository {
     private readonly vehicleRepository: Repository<Vehicle>,
   ) {}
 
+  async findBy(
+    field: keyof Vehicle,
+    value: unknown,
+  ): Promise<Vehicle[] | null> {
+    return this.vehicleRepository.findBy({ [field]: value });
+  }
+
   async findAll(): Promise<Vehicle[]> {
     return this.vehicleRepository.find();
   }
@@ -23,10 +30,6 @@ export class VehicleRepositoryTypeOrm implements IVehicleRepository {
     }
 
     return vehicle;
-  }
-
-  async findByPlaca(placa: string): Promise<Vehicle | null> {
-    return this.vehicleRepository.findOneBy({ placa });
   }
 
   async create(vehicle: Vehicle): Promise<Vehicle> {

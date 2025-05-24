@@ -15,6 +15,7 @@ export class GetVehicleByIdUseCase {
     if (!vehicle) {
       throw new NotFoundException(`Vehicle with ID ${id} not found`);
     }
+
     return vehicle;
   }
 }

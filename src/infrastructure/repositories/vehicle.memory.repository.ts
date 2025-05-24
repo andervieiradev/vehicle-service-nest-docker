@@ -7,6 +7,14 @@ import { v4 as uuidv4 } from 'uuid';
 export class VehicleRepositoryMemory implements IVehicleRepository {
   private vehicles: Vehicle[] = [];
 
+  async findBy(
+    field: keyof Vehicle,
+    value: unknown,
+  ): Promise<Vehicle[] | null> {
+    const vehicles = this.vehicles.filter((v) => v[field] === value);
+    return vehicles.length > 0 ? [...vehicles] : null;
+  }
+
   async findAll(): Promise<Vehicle[]> {
     return [...this.vehicles];
   }
@@ -16,35 +24,10 @@ export class VehicleRepositoryMemory implements IVehicleRepository {
     return vehicle ? { ...vehicle } : null;
   }
 
-  async findByPlaca(placa: string): Promise<Vehicle | null> {
-    const vehicle = this.vehicles.find((v) => v.placa === placa);
-    return vehicle ? { ...vehicle } : null;
-  }
-
   async create(vehicle: Vehicle): Promise<Vehicle> {
     // Garantir que o veículo tenha um ID
     if (!vehicle.id) {
       vehicle.id = uuidv4();
-    }
-
-    // Verificar se já existe um veículo com a mesma placa, chassi ou renavam
-    const existingPlaca = await this.findByPlaca(vehicle.placa);
-    if (existingPlaca) {
-      throw new Error(`Vehicle with placa ${vehicle.placa} already exists`);
-    }
-
-    const existingChassi = this.vehicles.find(
-      (v) => v.chassi === vehicle.chassi,
-    );
-    if (existingChassi) {
-      throw new Error(`Vehicle with chassi ${vehicle.chassi} already exists`);
-    }
-
-    const existingRenavam = this.vehicles.find(
-      (v) => v.renavam === vehicle.renavam,
-    );
-    if (existingRenavam) {
-      throw new Error(`Vehicle with renavam ${vehicle.renavam} already exists`);
     }
 
     // Criar uma cópia do veículo para evitar referências compartilhadas
@@ -63,39 +46,7 @@ export class VehicleRepositoryMemory implements IVehicleRepository {
       return null;
     }
 
-    // Verificar se está tentando atualizar para uma placa, chassi ou renavam que já existe
-    if (vehicleData.placa) {
-      const existingPlaca = await this.findByPlaca(vehicleData.placa);
-      if (existingPlaca && existingPlaca.id !== id) {
-        throw new Error(
-          `Vehicle with placa ${vehicleData.placa} already exists`,
-        );
-      }
-    }
-
-    if (vehicleData.chassi) {
-      const existingChassi = this.vehicles.find(
-        (v) => v.chassi === vehicleData.chassi && v.id !== id,
-      );
-      if (existingChassi) {
-        throw new Error(
-          `Vehicle with chassi ${vehicleData.chassi} already exists`,
-        );
-      }
-    }
-
-    if (vehicleData.renavam) {
-      const existingRenavam = this.vehicles.find(
-        (v) => v.renavam === vehicleData.renavam && v.id !== id,
-      );
-      if (existingRenavam) {
-        throw new Error(
-          `Vehicle with renavam ${vehicleData.renavam} already exists`,
-        );
-      }
-    }
-
-    // Atualizar o veículo
+    // Atualizar as propriedades do veículo
     const updatedVehicle = { ...this.vehicles[index], ...vehicleData };
     this.vehicles[index] = updatedVehicle;
 
