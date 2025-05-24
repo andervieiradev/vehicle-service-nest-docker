@@ -2,6 +2,12 @@
 /dist
 /node_modules
 
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+
 # Logs
 logs
 *.log
@@ -33,3 +39,9 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Ambiente
+.env
+
+# Banco de dados SQLite
+vehicles.sqlite
