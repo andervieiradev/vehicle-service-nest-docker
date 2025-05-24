@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   app:
     container_name: nestjs_vehicle_app
@@ -14,10 +13,12 @@ services:
       - DB_USERNAME=root
       - DB_PASSWORD=password
       - DB_DATABASE=vehicle_db
+      - RABBITMQ_URL=amqp://rabbitmq:5672
     volumes:
       - ./src:/app/src
     depends_on:
       - mysql
+      - rabbitmq
     restart: unless-stopped
     networks:
       - vehicle-network
@@ -37,6 +38,19 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     networks:
       - vehicle-network
+
+  rabbitmq:
+    container_name: rabbitmq_vehicle
+    image: rabbitmq:3-management
+    ports:
+      - '5672:5672' # porta do protocolo AMQP (aplicações)
+      - '15672:15672' # painel web de gerenciamento
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - vehicle-network
+    restart: unless-stopped
 
 networks:
   vehicle-network:
