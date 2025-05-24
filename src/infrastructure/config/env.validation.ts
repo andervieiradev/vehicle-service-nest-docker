@@ -50,6 +50,8 @@ export class EnvironmentVariables {
   DB_SQLITE_FILE: string = 'database.sqlite';
 }
 
+import { ValidationError } from '../../domain/errors';
+
 export function validate(config: Record<string, unknown>) {
   const validatedConfig = plainToClass(
     EnvironmentVariables,
@@ -67,7 +69,7 @@ export function validate(config: Record<string, unknown>) {
   });
 
   if (errors.length > 0) {
-    throw new Error(errors.toString());
+    throw new ValidationError(errors.toString());
   }
   return validatedConfig;
 }
