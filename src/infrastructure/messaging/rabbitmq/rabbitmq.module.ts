@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { RabbitMQMessagePublisher } from './rabbitmq-message-publisher.service';
+import { RabbitMQEventListenerController } from './rabbitmq-event-listener.controller';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { RabbitMQMessagePublisher } from './rabbitmq-message-publisher.service';
       },
     ]),
   ],
+  controllers: [RabbitMQEventListenerController],
   providers: [
     {
       provide: 'IMessagePublisher',
