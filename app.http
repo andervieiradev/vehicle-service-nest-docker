@@ -1,0 +1,54 @@
+### Variáveis
+@baseUrl = http://localhost:3000
+@contentType = application/json
+@id = 6f0f86d5-f180-4a91-85c8-e0a99d7d9ba4
+
+### Listar todos os veículos
+GET {{baseUrl}}/vehicles
+Content-Type: {{contentType}}
+
+### Obter um veículo específico por ID
+# Substitua {id} por um ID válido após criar um veículo
+GET {{baseUrl}}/vehicles/{{id}}
+Content-Type: {{contentType}}
+
+### Criar um novo veículo
+POST {{baseUrl}}/vehicles
+Content-Type: {{contentType}}
+
+{
+  "placa": "ABC1234",
+  "chassi": "9BWZZZ377VT004251",
+  "renavam": "12345678901",
+  "modelo": "Gol",
+  "marca": "Volkswagen",
+  "ano": 2022
+}
+
+### Criar outro veículo (exemplo adicional)
+POST {{baseUrl}}/vehicles
+Content-Type: {{contentType}}
+
+{
+  "placa": "XYZ5678",
+  "chassi": "8AWPN45J0YA123456",
+  "renavam": "98765432101",
+  "modelo": "Civic",
+  "marca": "Honda",
+  "ano": 2023
+}
+
+### Atualizar um veículo existente
+# Substitua {id} por um ID válido após criar um veículo
+PUT {{baseUrl}}/vehicles/{{id}}
+Content-Type: {{contentType}}
+
+{
+  "modelo": "Gol G6",
+  "ano": 2023
+}
+
+### Excluir um veículo
+# Substitua {id} por um ID válido após criar um veículo
+DELETE {{baseUrl}}/vehicles/{{id}}
+Content-Type: {{contentType}}
