@@ -16,12 +16,12 @@ A aplicação expõe uma **API RESTful** para gerenciamento de veículos, permit
 
 ## ✅ Tecnologias e ferramentas utilizadas
 
-- [NestJS](https://nestjs.com/) - Framework Node.js com suporte a TypeScript
-- [Docker](https://www.docker.com/) - Conteinerização da aplicação
-- [Jest](https://jestjs.io/) - Testes automatizados
-- [PostgreSQL](https://www.postgresql.org/) ou [SQLite](https://www.sqlite.org/) - Banco de dados relacional
-- (Opcional) Kafka / RabbitMQ / SQS - Mensageria para microserviços
-
+- NestJS - Framework Node.js com suporte a TypeScript
+- Docker - Conteinerização da aplicação
+- Jest - Testes automatizados
+- Mysql - Conexão com banco de dados MySQL
+- TypeORM - ORM para interação com o banco de dados
+- RabbitMQ - Mensageria
 ---
 
 ## 📦 Como executar o projeto
@@ -33,7 +33,16 @@ git clone https://github.com/andervieiradev/vehicle-service-nest-docker.git
 cd vehicle-service-nest-docker
 ```
 
-### 2. Execute via Docker Compose
+### 2. Ajustar as variáveis de ambiente
+
+Crie um arquivo `.env` na raiz do projeto copiando o modelo `.env.example`:
+
+```bash
+cp .env.example .env
+```
+Preencha as variáveis de ambiente conforme necessário, especialmente as configurações do banco de dados.
+
+### 3. Execute via Docker Compose
 
 ```bash
 docker-compose up --build
@@ -49,8 +58,17 @@ A aplicação estará disponível em:
 Para rodar os testes unitários com Jest:
 
 ```bash
-docker exec -it vehicle-service-nest-docker npm run test
+docker-compose exec app npm run test
 ```
+
+Para rodar os testes e2e com Jest:
+
+```bash
+docker-compose exec app npm run test:e2e
+```
+
+Poderá rodar o arquivo app.http para testar as rotas da API diretamente no VSCode ou qualquer outro editor que suporte arquivos HTTP.
+
 
 ---
 
@@ -65,6 +83,16 @@ docker exec -it vehicle-service-nest-docker npm run test
 | DELETE | `/vehicles/:id`    | Remove um veículo             |
 
 ---
+
+## 📄 Mensageria
+
+A aplicação utiliza RabbitMQ para enviar mensagens de eventos quando um veículo é criado. 
+
+As mensagens são enviadas para a fila `vehicles`.
+
+A fila é consumida pelo próprio serviço, que pode ser utilizado para processar eventos de forma assíncrona.
+
+Ao processar a fila é exibido um log no console com os dados do veículo criado.
 
 ## 👨‍💻 Autor
 

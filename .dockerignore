@@ -31,9 +31,6 @@ Thumbs.db
 # Coverage
 coverage
 
-# Test files (opcional)
-test
-__tests__
 
 # Docker compose override (caso não use em prod)
 docker-compose.override.yml
