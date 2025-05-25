@@ -17,9 +17,9 @@ POST {{baseUrl}}/vehicles
 Content-Type: {{contentType}}
 
 {
-  "placa": "ABg1434",
-  "chassi": "9BWZ5Z377VT004251",
-  "renavam": "12355678901",
+  "placa": "ABt1434",
+  "chassi": "9Bt5Z3773VT004251",
+  "renavam": "12t55678901",
   "modelo": "Gol",
   "marca": "Volkswagen",
   "ano": 2022

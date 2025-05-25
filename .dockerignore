@@ -1,0 +1,39 @@
+# Ignora node_modules (será reinstalado dentro do container)
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+package-lock.json
+
+# Arquivos de build
+dist
+build
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Editor configs
+.vscode
+.idea
+
+# Arquivos de ambiente (opcional, dependendo da estratégia)
+.env.*
+
+# Logs
+*.log
+
+# Coverage
+coverage
+
+# Test files (opcional)
+test
+__tests__
+
+# Docker compose override (caso não use em prod)
+docker-compose.override.yml

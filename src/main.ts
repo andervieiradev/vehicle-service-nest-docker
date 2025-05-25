@@ -7,12 +7,12 @@ import { Transport } from '@nestjs/microservices';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Configuração do microserviço RabbitMQ
+  // // Configuração do microserviço RabbitMQ
   app.connectMicroservice({
     transport: Transport.RMQ,
     options: {
-      urls: ['amqp://localhost:5672'],
-      queue: 'vehicles',
+      urls: [process.env.RABBITMQ_URL],
+      queue: process.env.RABBITMQ_QUEUE_NAME,
       queueOptions: {
         durable: false,
       },
@@ -30,6 +30,5 @@ async function bootstrap() {
   const port = process.env.PORT || 3000;
   await app.listen(port);
   console.log('HTTP app running on port', port);
-  console.log('RabbitMQ listener is active and waiting for messages');
 }
 bootstrap();

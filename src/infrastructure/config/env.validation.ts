@@ -48,6 +48,12 @@ export class EnvironmentVariables {
   @IsString()
   @IsOptional()
   DB_SQLITE_FILE: string = 'database.sqlite';
+
+  @IsString()
+  RABBITMQ_URL: string;
+
+  @IsString()
+  RABBITMQ_QUEUE: string;
 }
 
 import { ValidationError } from '../../domain/errors';

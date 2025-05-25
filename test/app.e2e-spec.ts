@@ -44,10 +44,11 @@ describe('AppController (e2e)', () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     // Recupera a instância do mock para uso nos testes
-    messagePublisher = moduleFixture.get<MockMessagePublisher>('IMessagePublisher');
-    
+    messagePublisher =
+      moduleFixture.get<MockMessagePublisher>('IMessagePublisher');
+
     // Configura um microserviço mock para poder iniciar sem conexão real
     app.connectMicroservice({
       transport: Transport.RMQ,
@@ -57,10 +58,10 @@ describe('AppController (e2e)', () => {
         queueOptions: { durable: false },
       },
     });
-    
+
     await app.init();
     // Não iniciamos o microserviço para evitar tentativas de conexão real
-    // await app.startAllMicroservices(); 
+    // await app.startAllMicroservices();
   });
 
   it('/ (GET)', () => {
@@ -69,10 +70,10 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect('Hello World!');
   });
-  
+
   // Aqui você pode adicionar mais testes verificando se o messagePublisher.publishVehicleCreated
   // foi chamado corretamente quando um veículo é criado
-  
+
   afterEach(async () => {
     await app.close();
   });
